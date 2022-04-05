@@ -1,0 +1,10 @@
+[package]
+name = "mod_b"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "mod_b"
+crate-type = ["cdylib"]
+
+[dependencies]
