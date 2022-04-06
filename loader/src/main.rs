@@ -1,7 +1,7 @@
 mod loader;
 
 use std::env;
-use crate::loader::Mod;
+use crate::loader::ModLoader;
 
 fn main() {
     let mut exe = env::current_exe()
@@ -12,7 +12,7 @@ fn main() {
         .join("mods")
         .read_dir()
         .expect("could not read 'mods' directory");
-    let mut mods = Vec::new();
+    let mut mod_loader = ModLoader::new();
     for result in mods_dir {
         let mod_path = match result {
             Ok(entry) => entry.path(),
@@ -21,18 +21,23 @@ fn main() {
                 continue
             }
         };
-        match Mod::new(mod_path) {
-            // I know I can use r#mod here but r# just feels wrong to me
-            Ok(mo) => mods.push(mo),
-            Err(e) => eprintln!("unable to load mod, error: {}", e),
-        };
+        if let Err(e) = mod_loader.insert(mod_path) {
+            eprintln!("unable to load mod, error: {:?}", e);
+        }
     }
 
-    println!("{} mods found: ", mods.len());
-    for mo in mods {
-        println!("\t{}", mo.name);
-        println!("\t\t{}", mo.desc);
-        mo.print();
+    match mod_loader.resolve() {
+        Ok(mods) => {
+            println!("{} mods found: ", mods.len());
+            for mo in &mods {
+                println!("\t{}", mo.name());
+                println!("\t\t{}", mo.desc());
+                mo.print();
+            }
+        }
+        Err(e) => {
+            eprintln!("unable to resolve mods {:?}", e);
+        }
     }
 }
 

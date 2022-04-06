@@ -5,8 +5,12 @@
 pub static MOD_NAME: &str = "Mod C";
 #[no_mangle]
 pub static MOD_DESC: &str = "This is Mod C's description";
-
 #[no_mangle]
-pub extern "C" fn print() {
-    println!("Hello from Mod C!");
+pub static mut __EXPORT: &[(*const (), &str)] = &[
+    // export pointer to special as "special"
+    (special as *const (), "special\0")
+];
+
+pub fn special(a: u32, b: u32) -> u32 {
+    a * b
 }
