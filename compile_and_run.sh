@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# to compile all current example mods, run with args: mod_a mod_b mod_c
 echo "compiling loader"
 cargo build --manifest-path loader/Cargo.toml || exit
 rm -r "output" 2>/dev/null

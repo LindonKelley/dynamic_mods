@@ -1,6 +1,8 @@
 use std::collections::HashMap;
-use std::ffi::OsStr;
+use std::ffi::{CStr, OsStr};
 use std::io::Write;
+use std::os::raw::c_char;
+use std::str::Utf8Error;
 use libloading::Library;
 
 pub struct ModLoader<'a>{
@@ -131,10 +133,14 @@ impl <'a> Mod<'a> {
                 **custom_func = custom;
             }
 
-            let name = **lib.get::<*const &str>(b"__MOD_NAME\0")
+            let c_name = *lib.get::<*const c_char>(b"__MOD_NAME\0")
                 .map_err(|e| ModLoaderError::NameError(e))?;
-            let desc = **lib.get::<*const &str>(b"__MOD_DESC\0")
+            let name= CStr::from_ptr(c_name).to_str()
+                .map_err(|e| ModLoaderError::NameParseError(e))?;
+            let c_desc = *lib.get::<*const c_char>(b"__MOD_DESC\0")
                 .map_err(|e| ModLoaderError::DescError(e))?;
+            let desc = CStr::from_ptr(c_desc).to_str()
+                .map_err(|e| ModLoaderError::DescParseError(e))?;
 
             let print = lib.get::<unsafe extern fn()>(b"print\0")
                 .ok().map(|f| *f);
@@ -182,7 +188,9 @@ impl <'a> Mod<'a> {
 #[derive(Debug)]
 pub enum ModLoaderError {
     LoadingError(libloading::Error),
+    NameParseError(Utf8Error),
     NameError(libloading::Error),
+    DescParseError(Utf8Error),
     DescError(libloading::Error)
 }
 
