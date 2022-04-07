@@ -21,7 +21,7 @@ pub fn game_mod(args: TokenStream) -> TokenStream {
                         }
                         _ => panic!("name improperly specified, should be 'name = \"mod_name\"'")
                     }
-                    "desc" => match tokens.get(i+1..=i+2) {
+                    "desc" | "description" => match tokens.get(i+1..=i+2) {
                         Some([TokenTree::Punct(punct), TokenTree::Literal(liter)])
                         if punct.to_string().as_str() == "=" && liter.to_string().contains("\"") => {
                             desc = Some(liter.to_string());

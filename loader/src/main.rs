@@ -1,12 +1,13 @@
 mod loader;
 
-use std::env;
 use crate::loader::ModLoader;
+use std::env;
 
 fn main() {
-    let mut exe = env::current_exe()
-        .expect("current directory may not exist,\
-        or this program was not run with the privileges to access it");
+    let mut exe = env::current_exe().expect(
+        "current directory may not exist,\
+        or this program was not run with the privileges to access it",
+    );
     exe.pop();
     let mods_dir = exe
         .join("mods")
@@ -18,7 +19,7 @@ fn main() {
             Ok(entry) => entry.path(),
             Err(_) => {
                 eprintln!("unable to read individual mod path, skipping");
-                continue
+                continue;
             }
         };
         if let Err(e) = mod_loader.insert(mod_path) {

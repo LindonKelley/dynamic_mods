@@ -135,7 +135,7 @@ impl <'a> Mod<'a> {
 
             let c_name = *lib.get::<*const c_char>(b"__MOD_NAME\0")
                 .map_err(|e| ModLoaderError::NameError(e))?;
-            let name= CStr::from_ptr(c_name).to_str()
+            let name = CStr::from_ptr(c_name).to_str()
                 .map_err(|e| ModLoaderError::NameParseError(e))?;
             let c_desc = *lib.get::<*const c_char>(b"__MOD_DESC\0")
                 .map_err(|e| ModLoaderError::DescError(e))?;

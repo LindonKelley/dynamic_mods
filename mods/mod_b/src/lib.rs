@@ -2,7 +2,7 @@ use modding_api::game_mod;
 
 game_mod! {
     name = "Mod B",
-    desc = "This is Mod B's description"
+    description = "This is Mod B's description"
 }
 
 #[no_mangle]
