@@ -131,9 +131,9 @@ impl <'a> Mod<'a> {
                 **custom_func = custom;
             }
 
-            let name = **lib.get::<*const &str>(b"MOD_NAME\0")
+            let name = **lib.get::<*const &str>(b"__MOD_NAME\0")
                 .map_err(|e| ModLoaderError::NameError(e))?;
-            let desc = **lib.get::<*const &str>(b"MOD_DESC\0")
+            let desc = **lib.get::<*const &str>(b"__MOD_DESC\0")
                 .map_err(|e| ModLoaderError::DescError(e))?;
 
             let print = lib.get::<unsafe extern fn()>(b"print\0")

@@ -1,10 +1,10 @@
-// pub isn't actually necessary on any of these, it just feels
-// appropriate to add them in
+use modding_api::game_mod;
 
-#[no_mangle]
-pub static MOD_NAME: &str = "Mod C";
-#[no_mangle]
-pub static MOD_DESC: &str = "This is Mod C's description";
+game_mod! {
+    name = "Mod C";
+    desc = "This is Mod C's description";
+}
+
 #[no_mangle]
 pub static mut __EXPORT: &[(*const (), &str)] = &[
     // export pointer to special as "special"

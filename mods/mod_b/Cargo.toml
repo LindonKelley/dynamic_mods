@@ -8,3 +8,4 @@ name = "mod_b"
 crate-type = ["cdylib"]
 
 [dependencies]
+modding_api = { path = "../../helper" }
